@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace TP_MODUL6_NIM
 {
@@ -10,8 +11,11 @@ namespace TP_MODUL6_NIM
 
         public SayaMusicTrack(string title)
         {
-            this.title = title;
             
+            Debug.Assert(title != null, "Judul lagu tidak boleh null!");
+            Debug.Assert(title.Length <= 100, "Judul lagu maksimal 100 karakter!");
+
+            this.title = title;
             Random rnd = new Random();
             this.id = rnd.Next(10000, 100000);
             this.playCount = 0;
@@ -19,7 +23,21 @@ namespace TP_MODUL6_NIM
 
         public void IncreasePlayCount(int count)
         {
-            this.playCount += count;
+            
+            Debug.Assert(count <= 10000000, "Input penambahan play count maksimal 10.000.000!");
+
+            try
+            {
+                
+                checked
+                {
+                    this.playCount += count;
+                }
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("Error: Penambahan play count menyebabkan overflow (melebihi batas maksimum integer)!");
+            }
         }
 
         public void PrintTrackDetails()
